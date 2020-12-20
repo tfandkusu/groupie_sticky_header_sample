@@ -33,6 +33,9 @@ class MainActivity : AppCompatActivity() {
             adapter.update(items.map {
                 MessageGroupieItem(it)
             })
+            // Scroll to end position
+            // In real product, this operation is done done for the first update.
+            recyclerView.scrollToPosition(items.size - 1)
         }
     }
 }
