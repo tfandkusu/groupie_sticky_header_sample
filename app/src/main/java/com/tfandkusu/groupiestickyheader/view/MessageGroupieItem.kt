@@ -6,13 +6,17 @@ import com.tfandkusu.groupiestickyheader.data.Message
 import com.tfandkusu.groupiestickyheader.databinding.ListItemMessageBinding
 import com.xwray.groupie.Item
 import com.xwray.groupie.viewbinding.BindableItem
+import java.text.SimpleDateFormat
 import java.util.*
 
 class MessageGroupieItem(private val message: Message) : BindableItem<ListItemMessageBinding>() {
+
+    private val sdf = SimpleDateFormat("HH:mm", Locale.JAPAN)
+
     override fun bind(viewBinding: ListItemMessageBinding, position: Int) {
         viewBinding.icon.setImageResource(message.iconResId)
         viewBinding.name.text = message.name
-        viewBinding.time.text = toTimeString(message.time)
+        viewBinding.time.text = sdf.format(Date(message.time))
         viewBinding.body.text = message.body
     }
 
@@ -21,16 +25,7 @@ class MessageGroupieItem(private val message: Message) : BindableItem<ListItemMe
     override fun initializeViewBinding(view: View): ListItemMessageBinding {
         return ListItemMessageBinding.bind(view)
     }
-
-    /**
-     * 時刻文字列を取得する
-     */
-    private fun toTimeString(time: Long): String {
-        val c = GregorianCalendar.getInstance()
-        c.timeInMillis = time
-        return "%02d:%02d".format(c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE))
-    }
-
+    
     override fun isSameAs(other: Item<*>): Boolean {
         return if (other is MessageGroupieItem) {
             message.id == other.message.id
