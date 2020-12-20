@@ -1,12 +1,15 @@
 package com.tfandkusu.groupiestickyheader.view
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.tfandkusu.groupiestickyheader.R
 import com.tfandkusu.groupiestickyheader.databinding.ActivityMainBinding
 import com.tfandkusu.groupiestickyheader.presenter.MainViewModel
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.GroupieViewHolder
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,10 +21,18 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+        setUpRecyclerView(binding.recyclerView)
+    }
+
+    private fun setUpRecyclerView(recyclerView: RecyclerView) {
+        val adapter = GroupAdapter<GroupieViewHolder>()
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
         viewModel.item.observe(this) { items ->
-            items.map {
-                Log.d("MainActivity", it.toString())
-            }
+            adapter.update(items.map {
+                MessageGroupieItem(it)
+            })
         }
     }
 }

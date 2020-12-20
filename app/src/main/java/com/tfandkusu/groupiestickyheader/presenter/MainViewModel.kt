@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mooveit.library.Fakeit
+import com.tfandkusu.groupiestickyheader.R
 import com.tfandkusu.groupiestickyheader.data.Message
 import java.util.*
 import kotlin.random.Random
@@ -16,21 +17,21 @@ class MainViewModel : ViewModel() {
     init {
         Fakeit.init()
         // Make Mocking Data
-        data class NameAndIcon(val name: String, val icon: String)
+        data class NameAndIcon(val name: String, val iconResId: Int)
         // Make member list
         val names = (0 until 4).map {
             Fakeit.name().lastName()
         }.toMutableList()
         // Icon images
         // https://www.irasutoya.com/
-        val iconImages = listOf(
-            "https://3.bp.blogspot.com/-X6ruoCYjbMQ/WSa8zi2McUI/AAAAAAABEhc/OtxhrQP4PYIusK-uT61_NHbxUmlEbLWgACLcB/s800/cat_mikeneko2.png",
-            "https://1.bp.blogspot.com/-PNtqP_kYbEw/XuMM_ImLmVI/AAAAAAABZeo/7aJRwvd66KEEIsNzjP3ddRxz_DsAWJlZQCNcBGAsYHQ/s1600/animal_alpaca_huacaya.png",
-            "https://1.bp.blogspot.com/-c-OqcO_Duvo/XxU0Tix8y8I/AAAAAAABaJA/WBNfRQv9hfgAqOpnqBbvyFXUVp0i04LJQCNcBGAsYHQ/s1600/animal_wallaby_kangaroo.png",
-            "https://2.bp.blogspot.com/-rRp0ZRxF3y0/U-8FlTBHG4I/AAAAAAAAkuU/lDng9w4s2Ig/s800/animal_pony.png"
+        val iconResIds = listOf(
+            R.drawable.cat_mikeneko2,
+            R.drawable.animal_alpaca_huacaya,
+            R.drawable.animal_wallaby_kangaroo,
+            R.drawable.animal_pony
         )
         val nameAndIcons = names.mapIndexed { index, name ->
-            NameAndIcon(name, iconImages[index])
+            NameAndIcon(name, iconResIds[index])
         }.toMutableList()
         // Make morning messages.
         val morning = mutableListOf("Good morning.", "Mornin", "Start working", "I do the work")
@@ -60,7 +61,7 @@ class MainViewModel : ViewModel() {
                         Message(
                             0,
                             nameAndIcons[it].name,
-                            nameAndIcons[it].icon,
+                            nameAndIcons[it].iconResId,
                             c.timeInMillis,
                             morning[it]
                         )
@@ -72,7 +73,7 @@ class MainViewModel : ViewModel() {
                         Message(
                             0,
                             nameAndIcons[it].name,
-                            nameAndIcons[it].icon,
+                            nameAndIcons[it].iconResId,
                             c.timeInMillis,
                             lunches[it]
                         )
@@ -84,7 +85,7 @@ class MainViewModel : ViewModel() {
                         Message(
                             0,
                             nameAndIcons[it].name,
-                            nameAndIcons[it].icon,
+                            nameAndIcons[it].iconResId,
                             c.timeInMillis,
                             leaves[it]
                         )
