@@ -9,7 +9,7 @@ import com.xwray.groupie.viewbinding.BindableItem
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MessageGroupieItem(private val message: Message) : BindableItem<ListItemMessageBinding>() {
+class MessageBindableItem(private val message: Message) : BindableItem<ListItemMessageBinding>() {
 
     private val sdf = SimpleDateFormat("HH:mm", Locale.JAPAN)
 
@@ -25,9 +25,9 @@ class MessageGroupieItem(private val message: Message) : BindableItem<ListItemMe
     override fun initializeViewBinding(view: View): ListItemMessageBinding {
         return ListItemMessageBinding.bind(view)
     }
-    
+
     override fun isSameAs(other: Item<*>): Boolean {
-        return if (other is MessageGroupieItem) {
+        return if (other is MessageBindableItem) {
             message.id == other.message.id
         } else {
             false
@@ -35,7 +35,7 @@ class MessageGroupieItem(private val message: Message) : BindableItem<ListItemMe
     }
 
     override fun hasSameContentAs(other: Item<*>): Boolean {
-        return if (other is MessageGroupieItem) {
+        return if (other is MessageBindableItem) {
             message == other.message
         } else {
             false

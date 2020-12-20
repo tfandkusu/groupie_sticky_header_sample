@@ -9,7 +9,7 @@ import com.xwray.groupie.viewbinding.BindableItem
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DayGroupieItem(private val day: YMD) : BindableItem<ListItemDayBinding>() {
+class DayBindableItem(private val day: YMD) : BindableItem<ListItemDayBinding>() {
     private val sdf = SimpleDateFormat("MM月dd日（EEE）", Locale.JAPAN)
 
     override fun bind(viewBinding: ListItemDayBinding, position: Int) {
@@ -24,7 +24,7 @@ class DayGroupieItem(private val day: YMD) : BindableItem<ListItemDayBinding>() 
     }
 
     override fun isSameAs(other: Item<*>): Boolean {
-        return if (other is DayGroupieItem) {
+        return if (other is DayBindableItem) {
             day == other.day
         } else {
             false
@@ -32,7 +32,7 @@ class DayGroupieItem(private val day: YMD) : BindableItem<ListItemDayBinding>() 
     }
 
     override fun hasSameContentAs(other: Item<*>): Boolean {
-        return if (other is DayGroupieItem) {
+        return if (other is DayBindableItem) {
             day == other.day
         } else {
             false

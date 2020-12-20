@@ -30,9 +30,9 @@ class MainActivity : AppCompatActivity() {
         recyclerView.setHasFixedSize(true)
         viewModel.dayList.observe(this) { dayList ->
             val items = dayList.flatMap { dayWithMessages ->
-                listOf(DayGroupieItem(dayWithMessages.day)) +
+                listOf(DayBindableItem(dayWithMessages.day)) +
                         dayWithMessages.messages.map { message ->
-                            MessageGroupieItem(message)
+                            MessageBindableItem(message)
                         }
             }
             adapter.update(items)
