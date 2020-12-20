@@ -29,13 +29,17 @@ class MainActivity : AppCompatActivity() {
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
-        viewModel.item.observe(this) { items ->
-            adapter.update(items.map {
-                MessageGroupieItem(it)
+        viewModel.dayList.observe(this) { items ->
+            var count = 0
+            adapter.update(items.flatMap { dayWithMessages ->
+                dayWithMessages.messages.map { message ->
+                    ++count
+                    MessageGroupieItem(message)
+                }
             })
             // Scroll to end position
             // In real product, this operation is done done for the first update.
-            recyclerView.scrollToPosition(items.size - 1)
+            recyclerView.scrollToPosition(count - 1)
         }
     }
 }

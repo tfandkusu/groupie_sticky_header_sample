@@ -5,16 +5,25 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mooveit.library.Fakeit
 import com.tfandkusu.groupiestickyheader.R
+import com.tfandkusu.groupiestickyheader.data.DayWithMessages
 import com.tfandkusu.groupiestickyheader.data.Message
+import com.tfandkusu.groupiestickyheader.util.MonthDay
+import com.tfandkusu.groupiestickyheader.util.extractMonthDay
 import java.util.*
 import kotlin.random.Random
 
 class MainViewModel : ViewModel() {
-    private val _items = MutableLiveData(listOf<Message>())
+    private val _dayList = MutableLiveData(listOf<DayWithMessages>())
 
-    val item: LiveData<List<Message>> = _items
+    val dayList: LiveData<List<DayWithMessages>> = _dayList
 
     init {
+        val messages = makeMessages()
+        val days = separateByDayAndMessages(messages)
+        this._dayList.value = days
+    }
+
+    private fun makeMessages(): List<Message> {
         Fakeit.init()
         // Make Mocking Data
         data class NameAndIcon(val name: String, val iconResId: Int)
@@ -46,7 +55,7 @@ class MainViewModel : ViewModel() {
         c.set(Calendar.SECOND, 0)
         c.set(Calendar.MINUTE, 0)
         c.set(Calendar.MILLISECOND, 0)
-        val items = mutableListOf<Message>()
+        var messages = mutableListOf<Message>()
         (0 until 10).map {
             if (c.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY && c.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY) {
                 nameAndIcons.shuffle()
@@ -57,7 +66,7 @@ class MainViewModel : ViewModel() {
                     // Morning Message
                     c.set(Calendar.HOUR_OF_DAY, 9)
                     c.set(Calendar.MINUTE, 50 + Random.nextInt(11))
-                    items.add(
+                    messages.add(
                         Message(
                             0,
                             nameAndIcons[it].name,
@@ -69,7 +78,7 @@ class MainViewModel : ViewModel() {
                     // Launch Message
                     c.set(Calendar.HOUR_OF_DAY, 12)
                     c.set(Calendar.MINUTE, Random.nextInt(120))
-                    items.add(
+                    messages.add(
                         Message(
                             0,
                             nameAndIcons[it].name,
@@ -81,7 +90,7 @@ class MainViewModel : ViewModel() {
                     // Leave message
                     c.set(Calendar.HOUR_OF_DAY, 19)
                     c.set(Calendar.MINUTE, Random.nextInt(30))
-                    items.add(
+                    messages.add(
                         Message(
                             0,
                             nameAndIcons[it].name,
@@ -95,13 +104,30 @@ class MainViewModel : ViewModel() {
             c.add(Calendar.DAY_OF_MONTH, -1)
         }
         // Sort
-        items.sortBy {
+        messages.sortBy {
             it.time
         }
-        // Set ids and save to LiveData
-        this._items.value = items.mapIndexed { index, message ->
+        // set ids
+        messages = messages.mapIndexed { index, message ->
             message.copy(id = (index + 1).toLong())
-        }
+        }.toMutableList()
+        return messages
     }
 
+    private fun separateByDayAndMessages(messages: List<Message>): List<DayWithMessages> {
+        val days = mutableListOf<DayWithMessages>()
+        var previousDay: MonthDay? = null
+        messages.map {
+            val md = extractMonthDay(it.time)
+            if (md != previousDay) {
+                days.add(DayWithMessages(it.time, listOf(it)))
+                previousDay = md
+            } else {
+                days.lastOrNull()?.messages?.let { messages ->
+                    days[days.size - 1] = days[days.size - 1].copy(messages = messages + it)
+                }
+            }
+        }
+        return days
+    }
 }
