@@ -14,7 +14,9 @@ class DayBindableItem(private val day: YMD) : BindableItem<ListItemDayBinding>()
 
     override fun bind(viewBinding: ListItemDayBinding, position: Int) {
         // javaのDateに変換してからSimpleDateFormatクラスを使って文字列にする。
-        viewBinding.day.text = sdf.format(day.toDate())
+        val text = sdf.format(day.toDate())
+        viewBinding.day.text = text
+        viewBinding.root.tag = text
     }
 
     override fun getLayout() = R.layout.list_item_day
