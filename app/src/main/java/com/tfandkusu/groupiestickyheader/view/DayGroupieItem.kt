@@ -2,17 +2,18 @@ package com.tfandkusu.groupiestickyheader.view
 
 import android.view.View
 import com.tfandkusu.groupiestickyheader.R
+import com.tfandkusu.groupiestickyheader.data.YMD
 import com.tfandkusu.groupiestickyheader.databinding.ListItemDayBinding
 import com.xwray.groupie.Item
 import com.xwray.groupie.viewbinding.BindableItem
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DateGroupieItem(val time: Long) : BindableItem<ListItemDayBinding>() {
+class DayGroupieItem(private val ymd: YMD) : BindableItem<ListItemDayBinding>() {
     private val sdf = SimpleDateFormat("MM月dd日（EEE）", Locale.JAPAN)
 
     override fun bind(viewBinding: ListItemDayBinding, position: Int) {
-        viewBinding.day.text = sdf.format(Date(time))
+        viewBinding.day.text = sdf.format(ymd.toDate())
     }
 
     override fun getLayout() = R.layout.list_item_day
@@ -22,16 +23,16 @@ class DateGroupieItem(val time: Long) : BindableItem<ListItemDayBinding>() {
     }
 
     override fun isSameAs(other: Item<*>): Boolean {
-        return if (other is DateGroupieItem) {
-            time == other.time
+        return if (other is DayGroupieItem) {
+            ymd == other.ymd
         } else {
             false
         }
     }
 
     override fun hasSameContentAs(other: Item<*>): Boolean {
-        return if (other is DateGroupieItem) {
-            time == other.time
+        return if (other is DayGroupieItem) {
+            ymd == other.ymd
         } else {
             false
         }

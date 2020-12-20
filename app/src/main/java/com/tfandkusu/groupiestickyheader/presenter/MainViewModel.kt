@@ -7,8 +7,8 @@ import com.mooveit.library.Fakeit
 import com.tfandkusu.groupiestickyheader.R
 import com.tfandkusu.groupiestickyheader.data.DayWithMessages
 import com.tfandkusu.groupiestickyheader.data.Message
-import com.tfandkusu.groupiestickyheader.util.MonthDay
-import com.tfandkusu.groupiestickyheader.util.extractMonthDay
+import com.tfandkusu.groupiestickyheader.data.YMD
+import com.tfandkusu.groupiestickyheader.util.extractYMD
 import java.util.*
 import kotlin.random.Random
 
@@ -116,11 +116,11 @@ class MainViewModel : ViewModel() {
 
     private fun separateByDayAndMessages(messages: List<Message>): List<DayWithMessages> {
         val days = mutableListOf<DayWithMessages>()
-        var previousDay: MonthDay? = null
+        var previousDay: YMD? = null
         messages.map {
-            val md = extractMonthDay(it.time)
+            val md = extractYMD(it.time)
             if (md != previousDay) {
-                days.add(DayWithMessages(it.time, listOf(it)))
+                days.add(DayWithMessages(md, listOf(it)))
                 previousDay = md
             } else {
                 days.lastOrNull()?.messages?.let { messages ->
