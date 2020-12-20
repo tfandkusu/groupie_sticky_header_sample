@@ -32,10 +32,11 @@ class MainActivity : AppCompatActivity() {
         viewModel.dayList.observe(this) { items ->
             var count = 0
             adapter.update(items.flatMap { dayWithMessages ->
-                dayWithMessages.messages.map { message ->
-                    ++count
-                    MessageGroupieItem(message)
-                }
+                listOf(DateGroupieItem(dayWithMessages.time)) +
+                        dayWithMessages.messages.map { message ->
+                            ++count
+                            MessageGroupieItem(message)
+                        }
             })
             // Scroll to end position
             // In real product, this operation is done done for the first update.
