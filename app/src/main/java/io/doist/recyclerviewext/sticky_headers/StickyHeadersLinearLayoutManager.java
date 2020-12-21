@@ -422,8 +422,8 @@ public class StickyHeadersLinearLayoutManager<T extends RecyclerView.Adapter & S
                 // When there are two views with the same tag,
                 for (View view : views) {
                     // 上にめり込んでいる方を非表示にする
-                    // Set view that is y < 0 to invisible.
-                    if (view.getY() < 0) {
+                    // Set view that is top < 0 to invisible.
+                    if (view.getTop() < 0) {
                         view.setVisibility(View.INVISIBLE);
                     }
                 }
