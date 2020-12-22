@@ -14,7 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Adds sticky headers capabilities to your {@link RecyclerView.Adapter}. It must implement {@link StickyHeaders} to
@@ -373,6 +375,7 @@ public class StickyHeadersLinearLayoutManager<T extends RecyclerView.Adapter & S
                     }
                     mStickyHeader.setTranslationX(getX(mStickyHeader, nextHeaderView));
                     mStickyHeader.setTranslationY(getY(mStickyHeader, nextHeaderView));
+                    fixHeaderViews();
                     return;
                 }
             }
@@ -381,7 +384,53 @@ public class StickyHeadersLinearLayoutManager<T extends RecyclerView.Adapter & S
         if (mStickyHeader != null) {
             scrapStickyHeader(recycler);
         }
+        fixHeaderViews();
     }
+
+    /**
+     * 上にめり込んでいるヘッダーを非表示にする
+     */
+    private void fixHeaderViews() {
+        // タグ文字列とViewリストのマップ
+        Map<String, List<View>> map = new HashMap<>();
+        // すべての子Viewに対して
+        int childCount = getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View child = getChildAt(i);
+            if (child != null) {
+                if (child.getTag() instanceof String) {
+                    // Stringクラスのインスタンスのタグを持っている時は
+                    String tag = (String) child.getTag();
+                    // いったん表示にして
+                    child.setVisibility(View.VISIBLE);
+                    // マップに追加する
+                    if (!map.containsKey(tag)) {
+                        // キーがなければ空配列を設定
+                        map.put(tag, new ArrayList<>());
+                    }
+                    List<View> views = map.get(tag);
+                    if (views != null) {
+                        views.add(child);
+                    }
+                }
+            }
+        }
+        // タグ毎にViewリストを確認する
+        for (List<View> views : map.values()) {
+            if (views.size() >= 2) {
+                // おなじタグのViewが2個ある時は
+                // When there are two views with the same tag,
+                for (View view : views) {
+                    // 上にめり込んでいる方を非表示にする
+                    // Set view that is top < 0 to invisible.
+                    if (view.getTop() < 0) {
+                        view.setVisibility(View.INVISIBLE);
+                    }
+                }
+            }
+        }
+    }
+
 
     /**
      * Creates {@link RecyclerView.ViewHolder} for {@code position}, including measure / layout, and assigns it to
