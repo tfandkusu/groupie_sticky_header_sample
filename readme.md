@@ -8,3 +8,8 @@ Qiita記事「[GroupieでSticky Headerを作る](https://qiita.com/tfandkusu/b76
 
 - [Groupie](https://github.com/lisawray/groupie)
 - [Doist/RecyclerViewExtensions](https://github.com/Doist/RecyclerViewExtensions)
+- [moove-it/fakeit](https://github.com/moove-it/fakeit)
+
+## 使用素材
+
+- [いらすとや](https://www.irasutoya.com/)
