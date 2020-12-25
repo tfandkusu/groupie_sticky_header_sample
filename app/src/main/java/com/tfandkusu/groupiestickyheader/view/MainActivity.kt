@@ -4,11 +4,11 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.epoxy.stickyheader.StickyHeaderLinearLayoutManager
 import com.tfandkusu.groupiestickyheader.R
 import com.tfandkusu.groupiestickyheader.databinding.ActivityMainBinding
 import com.tfandkusu.groupiestickyheader.presenter.MainViewModel
 import com.tfandkusu.groupiestickyheader.view.epoxy.MainController
+import com.tfandkusu.groupiestickyheader.view.epoxy.StickyHeaderLinearLayoutManager
 
 class MainActivity : AppCompatActivity() {
 
