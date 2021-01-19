@@ -1,6 +1,6 @@
 # groupie_sticky_header_sample
 
-Qiita記事「[GroupieでSticky Headerを作る(透明部分のあるヘッダーにも対応)](https://qiita.com/tfandkusu/items/b7681169c374a40dfb6e)」のために作成したAndroidアプリです。
+Qiita記事「[GroupieでSticky Headerを作る](https://qiita.com/tfandkusu/items/b7681169c374a40dfb6e)」のために作成したAndroidアプリです。
 
 <img src="https://raw.githubusercontent.com/tfandkusu/groupie_sticky_header_sample/main/movie.gif">
 
