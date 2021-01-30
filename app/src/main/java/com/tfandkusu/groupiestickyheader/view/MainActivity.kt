@@ -7,7 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.tfandkusu.groupiestickyheader.R
 import com.tfandkusu.groupiestickyheader.databinding.ActivityMainBinding
 import com.tfandkusu.groupiestickyheader.presenter.MainViewModel
-import io.doist.recyclerviewext.sticky_headers.StickyHeadersLinearLayoutManager
+import com.tfandkusu.groupiestickyheader.view.epoxy.MainController
+import com.tfandkusu.groupiestickyheader.view.epoxy.StickyHeaderLinearLayoutManager
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,22 +24,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpRecyclerView(recyclerView: RecyclerView) {
-        val adapter = StickyHeaderGroupAdapter()
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager =
-            StickyHeadersLinearLayoutManager<StickyHeaderGroupAdapter>(this)
+        val controller = MainController()
+        recyclerView.adapter = controller.adapter
+        recyclerView.layoutManager = StickyHeaderLinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
         viewModel.dayList.observe(this) { dayList ->
-            val items = dayList.flatMap { dayWithMessages ->
-                listOf(DayBindableItem(dayWithMessages.day)) +
-                        dayWithMessages.messages.map { message ->
-                            MessageBindableItem(message)
-                        }
-            }
-            adapter.update(items)
+            controller.setData(dayList)
             // Scroll to end position
             // In real product, this operation is done done for the first update.
-            recyclerView.scrollToPosition(items.size - 1)
+            val count = dayList.sumBy { 1 + it.messages.size }
+            recyclerView.scrollToPosition(count - 1)
         }
     }
 }
